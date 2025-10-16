@@ -45,14 +45,14 @@ app.post('/sign-in', function(req , res){
    const password = req.body.password;
 
  const user = users.find(function(u){
-        if(u.username=== username){
+        if(u.username=== username && u.password===password){
             return true;
         }else{
             return false;
         }
    })
    if(user){
-    const token = generateToken();
+    let token = generateToken();
     user.token = token;
     
     res.json({
@@ -66,5 +66,26 @@ app.post('/sign-in', function(req , res){
 console.log(users)
    })
 
+app.get('/me', function(req , res){
+    const  token= req.headers.token;
+    let foundUser = null;
 
+    for(i = 0; i<=users.length; i++){
+        if(users[i].token===token){
+        foundUser = users[i]
+        }
+    }
+    if(foundUser){
+        res.json({
+            username :foundUser.username,
+            password :foundUser.password
+            })
+        
+    }else{
+        res.json({
+            message: "Token invalid!"
+        })
+    }
+
+    })
 app.listen(3003);
