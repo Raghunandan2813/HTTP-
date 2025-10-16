@@ -40,5 +40,13 @@ app.get('/div', function(req , res){
 
         })
 })
-
+// we can also give an argument using slah
+app.get('/remainder/:a/:b' , function(req , res){
+    const a = parseInt(req.params.a);
+    const b = parseInt(req.params.b);
+    
+    res.json({
+        answer : a%b
+    })
+})
 app.listen(3005);
