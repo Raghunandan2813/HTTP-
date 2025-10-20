@@ -6,7 +6,12 @@ const app = express();
 app.use(express.json())
 
 const users=[];
-app.post('/signup', function(req , res){
+
+function logger(req , res , next){
+    console.log(req.method + "request came");
+    next();
+}
+app.post('/signup', logger , function(req , res){
     const username = req.body.username ;
     const password = req.body.password;
     if(users.find(u => u.username === username)){
@@ -26,7 +31,7 @@ app.post('/signup', function(req , res){
 })
 
 
-app.post('/signin', function(req , res){
+app.post('/signin', logger,  function(req , res){
     const username = req.body.username;
     const password = req.body.password;
 
@@ -66,7 +71,7 @@ function auth(req, res , next){
     })
    }
 }
-app.get('/me', auth ,function(req , res){
+app.get('/me', logger,auth ,function(req , res){
    
     let foundUser= null;
     for(let i = 0; i<users.length; i++){
